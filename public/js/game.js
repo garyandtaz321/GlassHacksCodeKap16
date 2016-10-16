@@ -32,17 +32,18 @@ this.map = this.add.tilemap('track1');
 this.map.addTilesetImage('tileset', 'tileset');
 
 this.layer = this.map.createLayer('t1');
+this.layer.resizeWorld();
+this.layer.debug = true;
 
-
-this.map.setCollisionBetween(1 , 271, 272);
+this.map.setCollisionBetween(1 ,271, 272);
 this.map.setCollisionBetween(359, 360);
 var style = { font: "17px Arial", fill: "#192AE3", align: "center" };
 var eStyle = { font: "17px Arial", fill: "#ED0505", align: "center" };
 this.text = this.add.text(0, 0, "You", style);
 this.text1 = this.add.text(0, 0, "Enemy", eStyle);
   // The base of our player
-    var startX = Math.round(Math.random() * (1000) - 500)
-    var startY = Math.round(Math.random() * (1000) - 500)
+    var startX = game.rnd.integerInRange(320, 480);
+    var startY = game.rnd.integerInRange(2976, 3072);
   player = game.add.sprite(startX, startY, 'dude')
 
   player.anchor.setTo(0.5, 0.5)
@@ -52,6 +53,40 @@ this.text1 = this.add.text(0, 0, "Enemy", eStyle);
   game.physics.enable(player, Phaser.Physics.ARCADE);
   player.body.maxVelocity.setTo(400, 400)
   player.body.collideWorldBounds = true
+    this.racestart = false;
+  this.time.events.add(Phaser.Timer.SECOND * 1, () => {
+            this.racestart = this.add.audio('racestart');
+            this.racestart.play();
+            this.three = this.add.text(395, 250, "3");
+            this.three.fill = "#ffffff";
+            this.three.fixedToCamera = true;
+    });
+
+    this.time.events.add(Phaser.Timer.SECOND * 2, () => {
+            this.three.alpha = 0;
+            this.two = this.add.text(395, 250, "2");
+            this.two.fill = "#ffffff";
+            this.two.fixedToCamera = true;
+    });
+
+    this.time.events.add(Phaser.Timer.SECOND * 3, () => {
+            this.two.alpha = 0;
+            this.one = this.add.text(395, 250, "1");
+            this.one.fill = "#ffffff";
+            this.one.fixedToCamera = true;
+    });
+
+    this.time.events.add(Phaser.Timer.SECOND * 4, () => {
+            this.one.alpha = 0;
+            this.go = this.add.text(395, 250, "Go!");
+            this.go.fill = "#ffffff";
+            this.go.fixedToCamera = true;
+            this.racestart = true;
+    });
+    
+    this.time.events.add(Phaser.Timer.SECOND * 5, () => {
+            this.go.alpha = 0;
+    });
 
   // Create some baddies to waste :)
   enemies = []
@@ -152,22 +187,14 @@ function onRemovePlayer (data) {
 }
 
 function update () {
-  for (var i = 0; i < enemies.length; i++) {
-    if (enemies[i].alive) {
-      enemies[i].update()
-      game.physics.arcade.collide(player, enemies[i].player, this.ColsCheck, null , this )
-      game.physics.arcade.collide(player, this.layer);
+
+game.physics.arcade.collide(player, this.layer);
+
 
 this.text.x = player.x -15
 this.text.y = player.y -40
 
-
-
-
-
-    }
-  }
-
+if(this.racestart = true){
   if (cursors.left.isDown) {
     player.angle -= 4
   } else if (cursors.right.isDown) {
@@ -197,6 +224,8 @@ this.text.y = player.y -40
   }
 
   socket.emit('move player', { x: player.x, y: player.y, angle: player.angle })
+  }else{
+  }
 }
 
 
