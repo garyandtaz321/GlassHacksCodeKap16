@@ -160,7 +160,7 @@ function onSocketDisconnect() {
 function onNewPlayer(data) {
 
   console.log('New player connected:, now we have a total of: ', SorryAlex, "With the most recent joiner having an ID of: ", data.id , "Restarting game instance")
-tpPlayers();
+ColsCheck();
 console.log("tp'ed");
   // Avoid possible duplicate players
   var duplicate = playerById(data.id)
@@ -266,14 +266,14 @@ player.x = this.game.rnd.integerInRange(320, 480);
   this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
     this.racestart = this.game.add.audio('racestart');
     this.racestart.play();
-    this.three = this.game.add.text(395, 250, "3");
+    this.three = this.game.add.text(780, 50, "3");
     this.three.fill = "#ffffff";
     this.three.fixedToCamera = true;
   });
 
   this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
-    this.three.alpha = 0;
-    this.two = this.game.add.text(395, 250, "2");
+    this.three.visible = false;
+    this.two = this.game.add.text(760, 50, "2");
     this.two.fill = "#ffffff";
     this.two.fixedToCamera = true;
     console.log(this.racestarts);
@@ -281,8 +281,8 @@ player.x = this.game.rnd.integerInRange(320, 480);
   });
 
   this.game.time.events.add(Phaser.Timer.SECOND * 3, () => {
-    this.two.alpha = 0;
-    this.one = this.game.add.text(395, 250, "1");
+    this.two.visble = false;
+    this.one = this.game.add.text(740, 50, "1");
     this.one.fill = "#ffffff";
     this.one.fixedToCamera = true;
     console.log(this.racestarts);
@@ -290,8 +290,8 @@ player.x = this.game.rnd.integerInRange(320, 480);
   });
 
   this.game.time.events.add(Phaser.Timer.SECOND * 4, () => {
-    this.one.alpha = 0;
-    this.go = this.game.add.text(395, 250, "Go!");
+    this.one.visible = false;
+    this.go = this.game.add.text(680, 50, "Go!");
     this.go.fill = "#ffffff";
     this.go.fixedToCamera = true;
   
@@ -299,7 +299,9 @@ player.x = this.game.rnd.integerInRange(320, 480);
   });
 
   this.game.time.events.add(Phaser.Timer.SECOND * 5, () => {
-    this.go.alpha = 0;
+    this.go.visible = false; 
+
+
 return this.racestarts = true;
   });
 
@@ -336,8 +338,6 @@ function lapCount() {
   }
 
 
-function tpPlayers(){
-this.player.body.maxVelocity.setTo(0, 0)
-console.log("askdausofou");
+function tpPlayers(x){
 
 }
