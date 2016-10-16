@@ -3,11 +3,11 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render })
 
 function preload () {
-  game.load.image('earth', 'assets/light_sand.png')
-  game.load.image('dude', 'assets/car.png', 64, 64)
-  game.load.image('enemy', 'assets/car2.png', 64, 64)
-      this.load.tilemap('track1', 'assets/track1.json', null, Phaser.Tilemap.TILED_JSON);
-    this.load.image('tileset', 'assets/tileset.png');
+  this.load.image('earth', 'assets/light_sand.png')
+  this.load.image('dude', 'assets/car.png', 64, 64)
+  this.load.image('enemy', 'assets/car2.png', 64, 64)
+  this.load.tilemap('track1', 'assets/track1.json', null, Phaser.Tilemap.TILED_JSON);
+  this.load.image('tileset', 'assets/tileset.png');
 }
 
 var socket // Socket connection
@@ -22,28 +22,28 @@ var currentSpeed = 0
 var cursorsrs
 
 function create () {
-  socket = io.connect()
+socket = io.connect()
 
   // Resize our game world to be a 2000 x 2000 square
-    this.game.world.setBounds(0, 0, 3200, 3200);
+this.game.world.setBounds(0, 0, 3200, 3200);
 
   // Our tiled scrolling background
-    this.map = this.add.tilemap('track1');
-    this.map.addTilesetImage('tileset', 'tileset');
+this.map = this.add.tilemap('track1');
+this.map.addTilesetImage('tileset', 'tileset');
 
-    this.layer = this.map.createLayer('t1');
-    this.layer.resizeWorld();
-    this.layer.debug = true;
+this.layer = this.map.createLayer('t1');
+this.layer.resizeWorld();
+this.layer.debug = true;
 
-    this.map.setCollisionBetween(271, 272);
-    this.map.setCollisionBetween(359, 360);
-  var style = { font: "17px Arial", fill: "#192AE3", align: "center" };
-    var eStyle = { font: "17px Arial", fill: "#ED0505", align: "center" };
+this.map.setCollisionBetween(271, 272);
+this.map.setCollisionBetween(359, 360);
+var style = { font: "17px Arial", fill: "#192AE3", align: "center" };
+var eStyle = { font: "17px Arial", fill: "#ED0505", align: "center" };
 this.text = this.add.text(0, 0, "You", style);
 this.text1 = this.add.text(0, 0, "Enemy", eStyle);
   // The base of our player
-  var startX = Math.round(Math.random() * (1000) - 500)
-  var startY = Math.round(Math.random() * (1000) - 500)
+    var startX = Math.round(Math.random() * (1000) - 500)
+    var startY = Math.round(Math.random() * (1000) - 500)
   player = game.add.sprite(startX, startY, 'dude')
 
   player.anchor.setTo(0.5, 0.5)
