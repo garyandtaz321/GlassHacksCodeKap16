@@ -2,6 +2,8 @@
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render })
 
+
+var SorryAlex = 0
 function preload () {
   this.load.image('earth', 'assets/light_sand.png')
   this.load.image('dude', 'assets/car.png', 64, 64)
@@ -44,16 +46,16 @@ this.text1 = this.add.text(0, 0, "Enemy", eStyle);
   // The base of our player
     var startX = game.rnd.integerInRange(320, 480);
     var startY = game.rnd.integerInRange(2976, 3072);
-  player = game.add.sprite(startX, startY, 'dude')
-
-  player.anchor.setTo(0.5, 0.5)
-
-  // This will force it to decelerate and limit its speed
-  // player.body.drag.setTo(200, 200)
-  game.physics.enable(player, Phaser.Physics.ARCADE);
+    player = game.add.sprite(startX, startY, 'dude')
+      player.anchor.setTo(0.5, 0.5)
+    game.physics.enable(player, Phaser.Physics.ARCADE);
   player.body.maxVelocity.setTo(400, 400)
   player.body.collideWorldBounds = true
-    this.racestart = false;
+
+this.racestarts = false;
+  // This will force it to decelerate and limit its speed
+  // player.body.drag.setTo(200, 200)
+
   this.time.events.add(Phaser.Timer.SECOND * 1, () => {
             this.racestart = this.add.audio('racestart');
             this.racestart.play();
@@ -67,6 +69,8 @@ this.text1 = this.add.text(0, 0, "Enemy", eStyle);
             this.two = this.add.text(395, 250, "2");
             this.two.fill = "#ffffff";
             this.two.fixedToCamera = true;
+            console.log(this.racestarts);
+
     });
 
     this.time.events.add(Phaser.Timer.SECOND * 3, () => {
@@ -74,6 +78,8 @@ this.text1 = this.add.text(0, 0, "Enemy", eStyle);
             this.one = this.add.text(395, 250, "1");
             this.one.fill = "#ffffff";
             this.one.fixedToCamera = true;
+ console.log(this.racestarts);
+
     });
 
     this.time.events.add(Phaser.Timer.SECOND * 4, () => {
@@ -81,11 +87,13 @@ this.text1 = this.add.text(0, 0, "Enemy", eStyle);
             this.go = this.add.text(395, 250, "Go!");
             this.go.fill = "#ffffff";
             this.go.fixedToCamera = true;
-            this.racestart = true;
+            this.racestarts = true;
+console.log(this.racestarts);
     });
     
     this.time.events.add(Phaser.Timer.SECOND * 5, () => {
             this.go.alpha = 0;
+
     });
 
   // Create some baddies to waste :)
@@ -187,14 +195,14 @@ function onRemovePlayer (data) {
 }
 
 function update () {
-
+if(this.racestarts == true){
 game.physics.arcade.collide(player, this.layer);
 
 
 this.text.x = player.x -15
 this.text.y = player.y -40
 
-if(this.racestart = true){
+if (SorryAlex = 5){
   if (cursors.left.isDown) {
     player.angle -= 4
   } else if (cursors.right.isDown) {
@@ -224,8 +232,8 @@ if(this.racestart = true){
   }
 
   socket.emit('move player', { x: player.x, y: player.y, angle: player.angle })
-  }else{
-  }
+ }
+ }
 }
 
 
