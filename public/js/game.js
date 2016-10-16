@@ -21,9 +21,8 @@ var socket // Socket connection
 var land
 
 var player
-
 var finline
-
+var SorryAlex = 0;
 var enemies
 
 var currentSpeed = 0
@@ -102,52 +101,9 @@ function create() {
   game.physics.enable(player, Phaser.Physics.ARCADE);
   player.body.maxVelocity.setTo(400, 400)
   player.body.collideWorldBounds = true
+ 
+ ColsCheck()
 
-  this.racestarts = false;
-  // This will force it to decelerate and limit its speed
-  // player.body.drag.setTo(200, 200)
-
-  this.time.events.add(Phaser.Timer.SECOND * 1, () => {
-    this.racestart = this.add.audio('racestart');
-    this.racestart.play();
-    this.three = this.add.text(395, 250, "3");
-    this.three.fill = "#ffffff";
-    this.three.fixedToCamera = true;
-  });
-
-  this.time.events.add(Phaser.Timer.SECOND * 2, () => {
-    this.three.alpha = 0;
-    this.two = this.add.text(395, 250, "2");
-    this.two.fill = "#ffffff";
-    this.two.fixedToCamera = true;
-    console.log(this.racestarts);
-
-  });
-
-  this.time.events.add(Phaser.Timer.SECOND * 3, () => {
-    this.two.alpha = 0;
-    this.one = this.add.text(395, 250, "1");
-    this.one.fill = "#ffffff";
-    this.one.fixedToCamera = true;
-    console.log(this.racestarts);
-
-  });
-
-  this.time.events.add(Phaser.Timer.SECOND * 4, () => {
-    this.one.alpha = 0;
-    this.go = this.add.text(395, 250, "Go!");
-    this.go.fill = "#ffffff";
-    this.go.fixedToCamera = true;
-    this.racestarts = true;
-    console.log(this.racestarts);
-  });
-
-  this.time.events.add(Phaser.Timer.SECOND * 5, () => {
-    this.go.alpha = 0;
-
-  });
-
-  // Create some baddies to waste :)
   enemies = []
 
   player.bringToTop()
@@ -181,8 +137,10 @@ var setEventHandlers = function () {
 
 // Socket connected
 function onSocketConnected() {
-  console.log('Connected to socket server')
+  console.log('Connected to socket server');
 
+SorryAlex = SorryAlex + 1;
+console.log(SorryAlex);
   // Reset enemies on reconnect
   enemies.forEach(function (enemy) {
     enemy.player.kill()
@@ -200,8 +158,10 @@ function onSocketDisconnect() {
 
 // New player
 function onNewPlayer(data) {
-  console.log('New player connected:', data.id)
 
+  console.log('New player connected:, now we have a total of: ', SorryAlex, "With the most recent joiner having an ID of: ", data.id , "Restarting game instance")
+tpPlayers();
+console.log("tp'ed");
   // Avoid possible duplicate players
   var duplicate = playerById(data.id)
   if (duplicate) {
@@ -211,6 +171,7 @@ function onNewPlayer(data) {
 
   // Add new player to the remote players array
   enemies.push(new RemotePlayer(data.id, game, player, data.x, data.y, data.angle))
+    
 }
 
 // Move player
@@ -246,14 +207,22 @@ function onRemovePlayer(data) {
 }
 
 function update() {
-  console.log(laps);
-  if (this.racestarts == true) {
+  console.log("Are controls unlocked?: " +racestarts);
+ if(racestarts == false)
+
+
+ {console.log("System Locked")
+ 
+ player.body.maxVelocity.setTo(0, 0)}else{
+ player.body.maxVelocity.setTo(400, 400)
+ }
+
     game.physics.arcade.collide(player, this.layer);
 
     this.text.x = player.x - 15
     this.text.y = player.y - 40
 
-    if (SorryAlex = 5) {
+  
       if (cursors.left.isDown) {
         player.angle -= 4
       } else if (cursors.right.isDown) {
@@ -267,7 +236,6 @@ function update() {
         if (currentSpeed > 0) {
           currentSpeed -= 4
         }
-      }
 
       game.physics.arcade.velocityFromRotation(player.rotation, currentSpeed, player.body.velocity)
 
@@ -280,7 +248,7 @@ function update() {
       }
 
       socket.emit('move player', { x: player.x, y: player.y, angle: player.angle })
-    }
+    
   }
 
   if (laps => 3) {
@@ -291,6 +259,50 @@ function update() {
 
 
 function ColsCheck() {
+this.racestarts = false;
+player.x = this.game.rnd.integerInRange(320, 480);
+  player.y = this.game.rnd.integerInRange(2976, 3072);
+
+  this.game.time.events.add(Phaser.Timer.SECOND * 1, () => {
+    this.racestart = this.game.add.audio('racestart');
+    this.racestart.play();
+    this.three = this.game.add.text(395, 250, "3");
+    this.three.fill = "#ffffff";
+    this.three.fixedToCamera = true;
+  });
+
+  this.game.time.events.add(Phaser.Timer.SECOND * 2, () => {
+    this.three.alpha = 0;
+    this.two = this.game.add.text(395, 250, "2");
+    this.two.fill = "#ffffff";
+    this.two.fixedToCamera = true;
+    console.log(this.racestarts);
+
+  });
+
+  this.game.time.events.add(Phaser.Timer.SECOND * 3, () => {
+    this.two.alpha = 0;
+    this.one = this.game.add.text(395, 250, "1");
+    this.one.fill = "#ffffff";
+    this.one.fixedToCamera = true;
+    console.log(this.racestarts);
+
+  });
+
+  this.game.time.events.add(Phaser.Timer.SECOND * 4, () => {
+    this.one.alpha = 0;
+    this.go = this.game.add.text(395, 250, "Go!");
+    this.go.fill = "#ffffff";
+    this.go.fixedToCamera = true;
+  
+    console.log(this.racestarts);
+  });
+
+  this.game.time.events.add(Phaser.Timer.SECOND * 5, () => {
+    this.go.alpha = 0;
+return this.racestarts = true;
+  });
+
 }
 
 function render() {
@@ -322,3 +334,10 @@ function lapCount() {
     console.log("You win!");
   }
   }
+
+
+function tpPlayers(){
+this.player.body.maxVelocity.setTo(0, 0)
+console.log("askdausofou");
+
+}
