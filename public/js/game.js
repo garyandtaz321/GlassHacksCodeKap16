@@ -45,7 +45,7 @@ function create() {
   this.layer.resizeWorld();
   this.layer.debug = false;
 
-  this.map.setCollisionBetween(271, 272);
+  this.map.setCollisionBetween(1 ,271 , 272);
   this.map.setCollisionBetween(359, 360);
 
   this.map.setTileIndexCallback(3073, () => {
@@ -92,8 +92,9 @@ function create() {
   var startX = game.rnd.integerInRange(320, 480);
   var startY = game.rnd.integerInRange(2976, 3072);
 
-  var finline = this.add.sprite(512, 2944, "finline");
+  finline = this.add.sprite(512, 2944, "finline");
   this.physics.arcade.enable(finline);
+
   finline.body.immovable = true;
 
   player = game.add.sprite(startX, startY, 'dude')
@@ -248,9 +249,6 @@ function update() {
   console.log(laps);
   if (this.racestarts == true) {
     game.physics.arcade.collide(player, this.layer);
-    if (laps => 3) {
-      this.physics.arcade.collide(player, finline, lapCount, null, this);
-    }
 
     this.text.x = player.x - 15
     this.text.y = player.y - 40
@@ -284,6 +282,11 @@ function update() {
       socket.emit('move player', { x: player.x, y: player.y, angle: player.angle })
     }
   }
+
+  if (laps => 3) {
+      this.physics.arcade.collide(player, finline, lapCount, null, this);
+    }
+
 }
 
 
@@ -306,7 +309,7 @@ function playerById(id) {
 }
 
 function lapCount() {
-  player.x = player.x - 65
+    player.x -= 75;
   if (laps == 3) {
     console.log("Lap 2");
     laps = 4;
@@ -318,4 +321,4 @@ function lapCount() {
   if (laps == 11) {
     console.log("You win!");
   }
-}
+  }
