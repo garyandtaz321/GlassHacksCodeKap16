@@ -32,10 +32,9 @@ this.map = this.add.tilemap('track1');
 this.map.addTilesetImage('tileset', 'tileset');
 
 this.layer = this.map.createLayer('t1');
-this.layer.resizeWorld();
-this.layer.debug = true;
 
-this.map.setCollisionBetween(271, 272);
+
+this.map.setCollisionBetween(1 , 271, 272);
 this.map.setCollisionBetween(359, 360);
 var style = { font: "17px Arial", fill: "#192AE3", align: "center" };
 var eStyle = { font: "17px Arial", fill: "#ED0505", align: "center" };
@@ -157,6 +156,7 @@ function update () {
     if (enemies[i].alive) {
       enemies[i].update()
       game.physics.arcade.collide(player, enemies[i].player, this.ColsCheck, null , this )
+      game.physics.arcade.collide(player, this.layer);
 
 this.text.x = player.x -15
 this.text.y = player.y -40
